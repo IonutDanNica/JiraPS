@@ -1,3 +1,4 @@
+
 function New-JiraIssue {
     # .ExternalHelp ..\JiraPS-help.xml
     [CmdletBinding( SupportsShouldProcess )]
@@ -58,7 +59,7 @@ function New-JiraIssue {
     process {
         $server = Get-JiraConfigServer -ErrorAction Stop -Debug:$false
 
-        $createmeta = Get-JiraIssueCreateMetadata -Project $Project -IssueType $IssueType -Credential $Credential -ErrorAction Stop -Debug:$false
+        $createmeta = Get-JiraIssueCreateMetadata -Project $Project -IssueType $IssueType -Credential $Credential -ErrorAction Stop
 
         $resourceURi = "$server/rest/api/2/issue"
 
@@ -141,7 +142,7 @@ function New-JiraIssue {
         foreach ($c in $createmeta) {
             Write-Debug "[$($MyInvocation.MyCommand.Name)] Checking metadata for `$c [$c]"
             if ($c.Required) {
-                if ($requestBody.ContainsKey($c.Id)) {
+                if ($requestBody.ContainsKey($c.FieldId)) {
                     Write-DebugMessage "[$($MyInvocation.MyCommand.Name)] Required field (id=[$($c.Id)], name=[$($c.Name)]) was provided (value=[$($requestBody.$($c.Id))])"
                 }
                 else {
